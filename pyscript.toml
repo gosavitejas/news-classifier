@@ -1,0 +1,2 @@
+# This tells PyScript which Python packages to install in the browser.
+packages = ["scikit-learn"]
