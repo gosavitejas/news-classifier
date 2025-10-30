@@ -1,6 +1,7 @@
 // This file connects our HTML to our Python code
 
 // 1. Get references to our HTML elements
+import { interpreter } from "pyscript";
 const classifyButton = document.getElementById("classify-button");
 const userInput = document.getElementById("user-input");
 const resultArea = document.getElementById("result-area");
@@ -27,7 +28,7 @@ async function onClassifyClick() {
     try {
         // 3. This is the magic!
         // We get our Python file (main.py)
-        const mainPy = pyscript.interpreter.globals.get('main');
+        const mainPy = interpreter.globals.get('main');
         
         // We call the 'predict' function *inside* main.py
         // and give it the user's text
