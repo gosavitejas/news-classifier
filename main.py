@@ -1,5 +1,6 @@
 import joblib
-from pyscript import display, document, create_proxy, http  # <-- This line changed
+# THIS LINE IS FIXED: 'aio' is replaced with 'http'
+from pyscript import display, document, create_proxy, http 
 import asyncio
 
 # These are the 20 category names
@@ -31,12 +32,13 @@ async def load_model():
     
     try:
         # Fetch and load the vectorizer
-        # We now use 'http.open_url' instead of 'aio.open_url'
+        # THIS LINE IS FIXED: 'aio.open_url' is replaced with 'http.open_url'
         response = await http.open_url('./vectorizer.pkl') 
         model_bytes = await response.read()
         vectorizer = joblib.load(model_bytes)
         
         # Fetch and load the model
+        # THIS LINE IS FIXED: 'aio.open_url' is replaced with 'http.open_url'
         response = await http.open_url('./model.pkl')
         model_bytes = await response.read()
         model = joblib.load(model_bytes)
