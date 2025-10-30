@@ -1,5 +1,5 @@
 import joblib
-from pyscript import display, aio, document, create_proxy
+from pyscript import display, document, create_proxy, http  # <-- This line changed
 import asyncio
 
 # These are the 20 category names
@@ -31,12 +31,13 @@ async def load_model():
     
     try:
         # Fetch and load the vectorizer
-        response = await aio.open_url('./vectorizer.pkl')
+        # We now use 'http.open_url' instead of 'aio.open_url'
+        response = await http.open_url('./vectorizer.pkl') 
         model_bytes = await response.read()
         vectorizer = joblib.load(model_bytes)
         
         # Fetch and load the model
-        response = await aio.open_url('./model.pkl')
+        response = await http.open_url('./model.pkl')
         model_bytes = await response.read()
         model = joblib.load(model_bytes)
         
@@ -111,7 +112,6 @@ classify_button.innerText = "Loading Model..."
 classify_button.disabled = True
 
 # 2. Create a "proxy" for our function
-# This lets JavaScript's "click" event call our Python function
 click_proxy = create_proxy(predict_and_display)
 
 # 3. Attach the Python function to the button's 'click' event
