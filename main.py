@@ -1,8 +1,10 @@
+# FIX 1: Import 'display' and 'document' from pyscript
+from pyscript import display, document
+# FIX 2: Import 'pyfetch' (for loading files) from 'pyodide.http'
+from pyodide.http import pyfetch
+# FIX 3: Import 'create_proxy' (for the button) from 'pyodide.ffi'
+from pyodide.ffi import create_proxy
 import joblib
-# FIX 1: 'aio' is gone. We only import 'display', 'document', and 'http'
-from pyscript import display, document, http
-# FIX 2: 'create_proxy' has moved to 'pyscript.ffi'
-from pyscript.ffi import create_proxy
 import asyncio
 
 # These are the 20 category names
@@ -34,14 +36,15 @@ async def load_model():
     
     try:
         # Fetch and load the vectorizer
-        # This uses the correct 'http.open_url'
-        response = await http.open_url('./vectorizer.pkl') 
-        model_bytes = await response.read()
+        # THIS IS NOW 'pyfetch'
+        response = await pyfetch('./vectorizer.pkl') 
+        # We also use .bytes() to get the data
+        model_bytes = await response.bytes()
         vectorizer = joblib.load(model_bytes)
         
         # Fetch and load the model
-        response = await http.open_url('./model.pkl')
-        model_bytes = await response.read()
+        response = await pyfetch('./model.pkl')
+        model_bytes = await response.bytes()
         model = joblib.load(model_bytes)
         
         print("Model and vectorizer loaded successfully!")
