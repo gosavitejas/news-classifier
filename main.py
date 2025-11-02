@@ -6,6 +6,7 @@ from pyodide.http import pyfetch
 from pyodide.ffi import create_proxy
 import joblib
 import asyncio
+import io  # <--- FIX: Import the 'io' library
 
 # These are the 20 category names
 CATEGORY_NAMES = [
@@ -36,16 +37,16 @@ async def load_model():
     
     try:
         # Fetch and load the vectorizer
-        # THIS IS NOW 'pyfetch'
         response = await pyfetch('./vectorizer.pkl') 
-        # We also use .bytes() to get the data
         model_bytes = await response.bytes()
-        vectorizer = joblib.load(model_bytes)
+        # <--- FIX: Wrap the bytes in an io.BytesIO object
+        vectorizer = joblib.load(io.BytesIO(model_bytes))
         
         # Fetch and load the model
         response = await pyfetch('./model.pkl')
         model_bytes = await response.bytes()
-        model = joblib.load(model_bytes)
+        # <--- FIX: Wrap the bytes in an io.BytesIO object
+        model = joblib.load(io.BytesIO(model_bytes))
         
         print("Model and vectorizer loaded successfully!")
         
@@ -118,7 +119,6 @@ classify_button.innerText = "Loading Model..."
 classify_button.disabled = True
 
 # 2. Create a "proxy" for our function
-# This uses the correctly imported 'create_proxy'
 click_proxy = create_proxy(predict_and_display)
 
 # 3. Attach the Python function to the button's 'click' event
