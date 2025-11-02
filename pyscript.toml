@@ -1,2 +1,5 @@
-# This tells PyScript which Python packages to install in the browser.
-packages = ["scikit-learn"]
+# The correct fix
+packages = [
+  "scikit-learn==1.6.1",
+  "joblib"
+]
